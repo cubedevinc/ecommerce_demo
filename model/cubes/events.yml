@@ -1,0 +1,74 @@
+cubes:
+  - name: events
+    sql_table: ECOM_NEW.EVENTS
+
+    joins:
+      - name: users
+        sql: "{CUBE}.USER_ID = {users.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: ID
+        type: number
+        primary_key: true
+
+      - name: user_id
+        sql: USER_ID
+        type: number
+
+      - name: session_id
+        sql: SESSION_ID
+        type: string
+
+      - name: sequence_number
+        sql: SEQUENCE_NUMBER
+        type: number
+
+      - name: event_type
+        sql: EVENT_TYPE
+        type: string
+
+      - name: uri
+        sql: URI
+        type: string
+
+      - name: browser
+        sql: BROWSER
+        type: string
+
+      - name: traffic_source
+        sql: TRAFFIC_SOURCE
+        type: string
+
+      - name: ip_address
+        sql: IP_ADDRESS
+        type: string
+
+      - name: city
+        sql: CITY
+        type: string
+
+      - name: state
+        sql: STATE
+        type: string
+
+      - name: postal_code
+        sql: POSTAL_CODE
+        type: string
+
+      - name: created_at
+        sql: CREATED_AT
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+      - name: unique_sessions
+        sql: session_id
+        type: count_distinct
+
+      - name: unique_users
+        sql: user_id
+        type: count_distinct

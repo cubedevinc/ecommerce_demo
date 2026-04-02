@@ -1,0 +1,30 @@
+cubes:
+  - name: distribution_centers
+    sql_table: ECOM_NEW.DISTRIBUTION_CENTERS
+
+    dimensions:
+      - name: id
+        sql: ID
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: NAME
+        type: string
+
+      - name: longitude
+        sql: LONGITUDE
+        type: number
+
+      - name: latitude
+        sql: LATITUDE
+        type: number
+
+      - name: location
+        sql: |
+          CONCAT({CUBE}.LATITUDE, ', ', {CUBE}.LONGITUDE)
+        type: string
+
+    measures:
+      - name: count
+        type: count

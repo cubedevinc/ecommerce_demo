@@ -1,0 +1,41 @@
+cubes:
+  - name: products
+    sql_table: ECOM_NEW.PRODUCTS
+    pre_aggregations:
+      - name: main
+        measures:
+          - products.count
+        dimensions:
+          - products.brand
+    dimensions:
+      - name: id
+        sql: ID
+        type: number
+        primary_key: true
+      - name: brand
+        sql: BRAND
+        type: string
+      - name: department
+        sql: DEPARTMENT
+        type: string
+      - name: sku
+        sql: SKU
+        type: string
+      - name: name
+        sql: NAME
+        type: string
+      - name: category
+        sql: CATEGORY
+        type: string
+      - name: cost
+        sql: COST
+        type: number
+      - name: retail_price
+        sql: RETAIL_PRICE
+        type: number
+      - name: distribution_center_id
+        sql: DISTRIBUTION_CENTER_ID
+        type: number
+    measures:
+      - name: count
+        type: count

@@ -1,0 +1,62 @@
+cubes:
+  - name: inventory_items
+    sql_table: ECOM_NEW.INVENTORY_ITEMS
+
+    joins:
+      - name: distribution_centers
+        sql: "{CUBE}.PRODUCT_DISTRIBUTION_CENTER_ID = {distribution_centers.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: ID
+        type: number
+        primary_key: true
+
+      - name: product_id
+        sql: PRODUCT_ID
+        type: number
+
+      - name: product_name
+        sql: PRODUCT_NAME
+        type: string
+
+      - name: product_brand
+        sql: PRODUCT_BRAND
+        type: string
+
+      - name: product_category
+        sql: PRODUCT_CATEGORY
+        type: string
+
+      - name: product_department
+        sql: PRODUCT_DEPARTMENT
+        type: string
+
+      - name: product_sku
+        sql: PRODUCT_SKU
+        type: string
+
+      - name: cost
+        sql: COST
+        type: number
+
+      - name: product_retail_price
+        sql: PRODUCT_RETAIL_PRICE
+        type: number
+
+      - name: product_distribution_center_id
+        sql: PRODUCT_DISTRIBUTION_CENTER_ID
+        type: number
+
+      - name: created_at
+        sql: CREATED_AT
+        type: time
+
+      - name: sold_at
+        sql: SOLD_AT
+        type: time
+
+    measures:
+      - name: count
+        type: count

@@ -1,0 +1,11 @@
+views:
+  - name: web_events_view
+    title: "Web Events"
+
+    cubes:
+      - join_path: events
+        includes: "*"
+
+      - join_path: events.users
+        prefix: true
+        includes: "*"

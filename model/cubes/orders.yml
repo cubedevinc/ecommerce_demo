@@ -1,37 +1,45 @@
 cubes:
   - name: orders
-    sql: >
-      select 1 as id, 100 as amount, 'new' status
-      UNION ALL
-      select 2 as id, 200 as amount, 'new' status
-      UNION ALL
-      select 3 as id, 300 as amount, 'processed' status
-      UNION ALL
-      select 4 as id, 500 as amount, 'processed' status
-      UNION ALL
-      select 5 as id, 600 as amount, 'shipped' status
-
-    joins: []
+    sql_table: ECOM_NEW.ORDERS
 
     dimensions:
-      - name: id
-        sql: id
+      - name: order_id
+        sql: ORDER_ID
         type: number
         primary_key: true
 
+      - name: user_id
+        sql: USER_ID
+        type: number
+
       - name: status
-        sql: status
+        sql: STATUS
         type: string
+
+      - name: gender
+        sql: GENDER
+        type: string
+
+      - name: num_of_item
+        sql: NUM_OF_ITEM
+        type: number
+
+      - name: returned_at
+        sql: RETURNED_AT
+        type: string
+
+      - name: created_at
+        sql: CREATED_AT
+        type: time
+
+      - name: delivered_at
+        sql: DELIVERED_AT
+        type: time
+
+      - name: shipped_at
+        sql: SHIPPED_AT
+        type: time
 
     measures:
       - name: count
         type: count
-
-      - name: amount
-        sql: amount
-        type: sum
-
-    pre_aggregations:
-      # Pre-aggregation definitions go here.
-      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
-
