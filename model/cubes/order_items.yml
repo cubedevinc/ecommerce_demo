@@ -1,6 +1,6 @@
 cubes:
   - name: order_items
-    sql_table: ECOM_NEW.ORDER_ITEMS
+    sql_table: ECOMMERCE.ORDER_ITEMS
     description: Order items in the e-commerce platform
 
     joins:

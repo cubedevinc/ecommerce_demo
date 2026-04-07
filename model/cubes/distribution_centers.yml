@@ -1,6 +1,6 @@
 cubes:
   - name: distribution_centers
-    sql_table: ECOM_NEW.DISTRIBUTION_CENTERS
+    sql_table: ECOMMERCE.DISTRIBUTION_CENTERS
 
     dimensions:
       - name: id

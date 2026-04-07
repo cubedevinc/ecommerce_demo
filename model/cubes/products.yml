@@ -1,6 +1,6 @@
 cubes:
   - name: products
-    sql_table: ECOM_NEW.PRODUCTS
+    sql_table: ECOMMERCE.PRODUCTS
     pre_aggregations:
       - name: main
         measures:
