@@ -87,3 +87,14 @@ cubes:
         sql: sale_price
         format: currency
         description: "We use this when look at revenue"
+
+    pre_aggregations:
+      - name: orders_transactions_rollup
+        measures:
+          - count
+          - order_count
+          - total_sale_price
+        dimensions:
+          - status
+        time_dimension: created_at
+        granularity: day
