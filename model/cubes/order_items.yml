@@ -88,6 +88,20 @@ cubes:
         format: currency
         description: "We use this when look at revenue"
 
+      - name: total_revenue
+        description: "Grand total revenue across all rows in the current query context"
+        multi_stage: true
+        sql: "{total_sale_price}"
+        type: sum
+        group_by: []
+
+      - name: revenue_share
+        description: "Each segment's share of total revenue"
+        multi_stage: true
+        sql: "1.0 * {total_sale_price} / NULLIF({total_revenue}, 0)"
+        type: number
+        format: percent
+
     pre_aggregations:
       - name: orders_transactions_rollup
         measures:
