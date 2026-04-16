@@ -5,6 +5,8 @@ views:
     cubes:
       - join_path: order_items
         includes: "*"
+        excludes:
+          - total_revenue_grand_total
 
       - join_path: order_items.products
         prefix: true
