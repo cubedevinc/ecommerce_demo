@@ -43,3 +43,10 @@ cubes:
     measures:
       - name: count
         type: count
+
+      - name: rolling_45_day_count
+        title: "Rolling 45-Day Order Count"
+        type: count
+        rolling_window:
+          trailing: 45 day
+          offset: end
