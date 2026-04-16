@@ -101,14 +101,3 @@ cubes:
         sql: "1.0 * {total_sale_price} / NULLIF({total_revenue_grand_total}, 0)"
         type: number
         format: percent
-
-    pre_aggregations:
-      - name: orders_transactions_rollup
-        measures:
-          - count
-          - order_count
-          - total_sale_price
-        dimensions:
-          - status
-        time_dimension: created_at
-        granularity: day
