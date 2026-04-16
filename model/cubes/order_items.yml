@@ -88,8 +88,8 @@ cubes:
         format: currency
         description: "We use this when look at revenue"
 
-      - name: total_revenue
-        description: "Grand total revenue across all rows in the current query context"
+      - name: total_revenue_grand_total
+        description: "Internal: grand total of sale price across all rows, used for revenue_share calculation"
         multi_stage: true
         sql: "{total_sale_price}"
         type: sum
@@ -98,7 +98,7 @@ cubes:
       - name: revenue_share
         description: "Each segment's share of total revenue"
         multi_stage: true
-        sql: "1.0 * {total_sale_price} / NULLIF({total_revenue}, 0)"
+        sql: "1.0 * {total_sale_price} / NULLIF({total_revenue_grand_total}, 0)"
         type: number
         format: percent
 
