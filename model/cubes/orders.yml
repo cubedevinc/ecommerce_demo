@@ -50,3 +50,9 @@ cubes:
         rolling_window:
           trailing: 45 day
           offset: end
+
+      - name: rolling_30_day_count
+        title: "Rolling 30-Day Order Count"
+        type: count
+        rolling_window:
+          trailing: 30 day
