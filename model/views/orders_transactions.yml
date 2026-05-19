@@ -1,6 +1,6 @@
 views:
   - name: orders_transactions
-    title: "Orders Transactions"
+    title: "Orders Transactions 2"
 
     cubes:
       - join_path: order_items
