@@ -2,6 +2,9 @@ views:
   - name: web_events_view
     title: "Web Events"
 
+    meta:
+      auto_run: false
+
     cubes:
       - join_path: events
         includes: "*"
