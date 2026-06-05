@@ -1,6 +1,7 @@
 views:
   - name: web_events_view
     title: "Web Events"
+    description: "Tracks user interactions and behavioral events on the website, including event type, sequence, and associated user profile details."
 
     meta:
       auto_run: false
