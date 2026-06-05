@@ -1,0 +1,8 @@
+views:
+  - name: products_view
+    title: "Products"
+    description: "Product catalog with pricing, category, and brand information"
+
+    cubes:
+      - join_path: products
+        includes: "*"

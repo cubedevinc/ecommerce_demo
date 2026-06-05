@@ -1,6 +1,7 @@
 views:
   - name: orders_transactions
     title: "Orders Transactions"
+    description: "Comprehensive view of order line items enriched with product details, order status, customer profiles, and distribution center information."
 
     cubes:
       - join_path: order_items
