@@ -1,0 +1,125 @@
+cubes:
+  - name: leads
+    public: false
+    sql: |
+      SELECT 1 AS id, 'Block' AS company_name, 'Jack Dorsey' AS contact_name, 'VP of Engineering' AS contact_title, 'cto@block.xyz' AS contact_email, 'Fintech' AS industry, 'San Francisco, CA' AS hq_location, 10000 AS employee_count, 'Series G' AS funding_stage, 4200000000 AS total_funding_usd, '2026-01-15' AS lead_created_at, 'inbound' AS lead_source, 'hot' AS lead_status UNION ALL
+      SELECT 2, 'Pinterest', 'Sarah Chen', 'Head of Data', 'sarah.chen@pinterest.com', 'Social Media', 'San Francisco, CA', 4700, 'Public', 1500000000, '2026-01-22', 'inbound', 'warm' UNION ALL
+      SELECT 3, 'eBay', 'Marcus Webb', 'Director of Analytics', 'marcus.webb@ebay.com', 'E-commerce', 'San Jose, CA', 9200, 'Public', 2100000000, '2026-02-03', 'inbound', 'hot' UNION ALL
+      SELECT 4, 'Groupon', 'Priya Patel', 'CTO', 'priya.patel@groupon.com', 'E-commerce', 'Chicago, IL', 1734, 'Public', 312000000, '2026-02-10', 'inbound', 'warm' UNION ALL
+      SELECT 5, 'Snowflake', 'David Kim', 'SVP Engineering', 'd.kim@snowflake.com', 'Data & Cloud', 'Bozeman, MT', 6800, 'Public', 3400000000, '2026-02-18', 'inbound', 'hot' UNION ALL
+      SELECT 6, 'Confluent', 'Rachel Torres', 'VP Data Platform', 'r.torres@confluent.io', 'Data Infrastructure', 'Mountain View, CA', 3200, 'Public', 685000000, '2026-02-24', 'outbound', 'warm' UNION ALL
+      SELECT 7, 'Databricks', 'Alex Nguyen', 'Chief Data Officer', 'a.nguyen@databricks.com', 'Data & AI', 'San Francisco, CA', 6000, 'Series J', 5400000000, '2026-03-05', 'inbound', 'hot' UNION ALL
+      SELECT 8, 'Opal Security', 'Megan Clark', 'CISO', 'm.clark@opal.dev', 'Cybersecurity', 'San Francisco, CA', 180, 'Series B', 64000000, '2026-03-12', 'inbound', 'warm' UNION ALL
+      SELECT 9, 'Adaptive Security', 'Brian Foster', 'CTO', 'b.foster@adaptive.security', 'Cybersecurity', 'New York, NY', 95, 'Series B', 43000000, '2026-03-19', 'outbound', 'cold' UNION ALL
+      SELECT 10, 'HubSpot', 'Linda Park', 'VP of RevOps', 'l.park@hubspot.com', 'CRM & Marketing', 'Cambridge, MA', 7400, 'Public', 980000000, '2026-03-25', 'inbound', 'warm' UNION ALL
+      SELECT 11, 'Reddit', 'James O''Brien', 'Director of Engineering', 'j.obrien@reddit.com', 'Social Media', 'San Francisco, CA', 2555, 'Public', 1400000000, '2026-04-02', 'inbound', 'hot' UNION ALL
+      SELECT 12, 'Meta', 'Yuki Tanaka', 'Data Science Lead', 'y.tanaka@meta.com', 'Social Media', 'Menlo Park, CA', 70000, 'Public', 41000000000, '2026-04-07', 'inbound', 'cold' UNION ALL
+      SELECT 13, 'Sprinter Health', 'Carlos Rivera', 'VP Operations', 'c.rivera@sprinterhealth.com', 'HealthTech', 'Menlo Park, CA', 620, 'Series B', 95000000, '2026-04-14', 'outbound', 'warm' UNION ALL
+      SELECT 14, 'Base Power', 'Emily Watson', 'CFO', 'e.watson@basepower.com', 'CleanTech', 'Austin, TX', 310, 'Series B', 200000000, '2026-04-21', 'inbound', 'hot' UNION ALL
+      SELECT 15, 'Atlys', 'Rahul Mehta', 'Head of Growth', 'r.mehta@atlys.com', 'TravelTech', 'San Francisco, CA', 430, 'Series B', 56000000, '2026-04-28', 'outbound', 'cold' UNION ALL
+      SELECT 16, 'Story Protocol', 'Nina Jacobs', 'Chief Product Officer', 'n.jacobs@storyprotocol.xyz', 'Web3 & AI', 'San Francisco, CA', 90, 'Series A', 54000000, '2026-05-05', 'inbound', 'warm' UNION ALL
+      SELECT 17, 'GovWell', 'Tyler Brooks', 'CEO', 't.brooks@govwell.com', 'GovTech', 'New York, NY', 45, 'Series A', 4500000, '2026-05-12', 'inbound', 'hot' UNION ALL
+      SELECT 18, 'Salesforce', 'Amanda Zhou', 'Director of Data', 'a.zhou@salesforce.com', 'CRM & SaaS', 'San Francisco, CA', 73000, 'Public', 26000000000, '2026-05-19', 'inbound', 'warm' UNION ALL
+      SELECT 19, 'Socket', 'Derek Mann', 'Head of Security', 'd.mann@socket.dev', 'Cybersecurity', 'San Francisco, CA', 55, 'Series B', 40000000, '2026-05-26', 'outbound', 'cold' UNION ALL
+      SELECT 20, 'Intel', 'Susan Hall', 'VP of Cloud Infra', 's.hall@intel.com', 'Semiconductors', 'Santa Clara, CA', 99000, 'Public', 15000000000, '2026-06-02', 'inbound', 'warm' UNION ALL
+      SELECT 21, 'Ethos AI', 'Mohammed Al-Rashid', 'CTO', 'm.alrashid@ethos.ai', 'AI & ML', 'London, UK', 38, 'Series A', 3200000, '2026-06-09', 'inbound', 'hot' UNION ALL
+      SELECT 22, 'Perplexity AI', 'Sofia Martinez', 'Head of Partnerships', 's.martinez@perplexity.ai', 'AI & ML', 'San Francisco, CA', 200, 'Series C', 500000000, '2026-06-10', 'inbound', 'hot' UNION ALL
+      SELECT 23, 'Mistral AI', 'Thomas Leclerc', 'VP Engineering', 't.leclerc@mistral.ai', 'AI & ML', 'Paris, France', 280, 'Series B', 1100000000, '2026-06-11', 'inbound', 'hot' UNION ALL
+      SELECT 24, 'Cohere', 'Priya Nair', 'Director of Sales Engineering', 'p.nair@cohere.com', 'AI & ML', 'Toronto, Canada', 380, 'Series C', 270000000, '2026-06-12', 'outbound', 'warm' UNION ALL
+      SELECT 25, 'Scale AI', 'Jason Wu', 'Chief Revenue Officer', 'j.wu@scale.com', 'AI & Data', 'San Francisco, CA', 1000, 'Series F', 1000000000, '2026-06-13', 'inbound', 'hot' UNION ALL
+      SELECT 26, 'Figma', 'Hanna Müller', 'VP of Engineering', 'h.muller@figma.com', 'Design Tools', 'San Francisco, CA', 1350, 'Pre-IPO', 12500000000, '2026-06-14', 'inbound', 'warm' UNION ALL
+      SELECT 27, 'Notion', 'Ben Carter', 'Head of Data', 'b.carter@notion.so', 'Productivity SaaS', 'San Francisco, CA', 600, 'Series C', 275000000, '2026-06-15', 'outbound', 'warm' UNION ALL
+      SELECT 28, 'Vercel', 'Anya Kowalski', 'CTO', 'a.kowalski@vercel.com', 'Developer Tools', 'San Francisco, CA', 500, 'Series D', 250000000, '2026-06-16', 'inbound', 'hot' UNION ALL
+      SELECT 29, 'Linear', 'Oscar Fernandez', 'VP Product', 'o.fernandez@linear.app', 'Developer Tools', 'San Francisco, CA', 75, 'Series B', 52000000, '2026-06-17', 'inbound', 'warm' UNION ALL
+      SELECT 30, 'Rippling', 'Diane Lee', 'Head of Enterprise Sales', 'd.lee@rippling.com', 'HR Tech', 'San Francisco, CA', 3000, 'Series G', 500000000, '2026-06-18', 'inbound', 'hot'
+
+    dimensions:
+      - name: id
+        sql: id
+        type: number
+        primary_key: true
+
+      - name: company_name
+        sql: company_name
+        type: string
+
+      - name: contact_name
+        sql: contact_name
+        type: string
+
+      - name: contact_title
+        sql: contact_title
+        type: string
+
+      - name: contact_email
+        sql: contact_email
+        type: string
+
+      - name: industry
+        sql: industry
+        type: string
+
+      - name: hq_location
+        sql: hq_location
+        type: string
+
+      - name: employee_count
+        sql: employee_count
+        type: number
+
+      - name: funding_stage
+        sql: funding_stage
+        type: string
+
+      - name: total_funding_usd
+        sql: total_funding_usd
+        type: number
+
+      - name: lead_created_at
+        sql: lead_created_at
+        type: time
+
+      - name: lead_source
+        sql: lead_source
+        type: string
+
+      - name: lead_status
+        sql: lead_status
+        type: string
+
+    measures:
+      - name: count
+        type: count
+
+      - name: total_funding
+        sql: total_funding_usd
+        type: sum
+
+      - name: avg_employee_count
+        sql: employee_count
+        type: avg
+
+      - name: hot_leads_count
+        type: count
+        filters:
+          - sql: "{CUBE}.lead_status = 'hot'"
+
+      - name: warm_leads_count
+        type: count
+        filters:
+          - sql: "{CUBE}.lead_status = 'warm'"
+
+      - name: cold_leads_count
+        type: count
+        filters:
+          - sql: "{CUBE}.lead_status = 'cold'"
+
+      - name: inbound_leads_count
+        type: count
+        filters:
+          - sql: "{CUBE}.lead_source = 'inbound'"
+
+      - name: outbound_leads_count
+        type: count
+        filters:
+          - sql: "{CUBE}.lead_source = 'outbound'"

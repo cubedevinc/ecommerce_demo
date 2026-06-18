@@ -1,0 +1,10 @@
+views:
+  - name: leads_view
+    description: >
+      Inbound and outbound leads enriched with company firmographics,
+      funding stage, employee count and lead status. Companies represent
+      real organizations that have had notable recent news (layoffs, funding
+      rounds, industry shifts) so agents can search for external context.
+    cubes:
+      - join_path: leads
+        includes: "*"
