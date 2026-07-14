@@ -1,3 +1,15 @@
+views:
+  - name: cub_3173_demo
+    title: "CUB-3173 Demo"
+    cubes:
+      - join_path: order_items
+        includes: "*"
+    meta:
+      auto_run: false
+      default_ui_filters:
+        - member: created_at
+          operator: is
+          value: yesterday
 cubes:
   - name: order_items
     sql_table: ECOMMERCE.ORDER_ITEMS
