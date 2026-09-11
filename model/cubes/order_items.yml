@@ -102,6 +102,14 @@ cubes:
         type: number
         format: percent
 
+      - name: avg_order_value
+        title: "Average Order Value"
+        description: "Average revenue per order: total sale price divided by the number of distinct orders"
+        multi_stage: true
+        sql: "{total_sale_price} / NULLIF({order_count}, 0)"
+        type: number
+        format: currency
+
     pre_aggregations:
       - name: orders_transactions_rollup
         measures:
