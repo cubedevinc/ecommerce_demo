@@ -88,6 +88,24 @@ cubes:
         format: currency
         description: "We use this when look at revenue"
 
+      - name: total_sale_price_12mtd
+        type: sum
+        sql: sale_price
+        format: currency
+        description: "Sales (sale price) over the trailing 12 months ending at each point in the queried time series (12MTD / R12)"
+        rolling_window:
+          trailing: 12 month
+          offset: end
+
+      - name: total_sale_price_24mtd
+        type: sum
+        sql: sale_price
+        format: currency
+        description: "Sales (sale price) over the trailing 24 months ending at each point in the queried time series (24MTD / R24)"
+        rolling_window:
+          trailing: 24 month
+          offset: end
+
       - name: product_count
         type: count_distinct
         sql: product_id
