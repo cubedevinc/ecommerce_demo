@@ -88,6 +88,22 @@ cubes:
         format: currency
         description: "We use this when look at revenue"
 
+      - name: product_count
+        type: count_distinct
+        sql: product_id
+        description: "Number of distinct products sold"
+        
+      - name: avg_sales_amount_per_product
+        type: number
+        sql: "{total_sale_price} / NULLIF({product_count}, 0)"
+        description: "Average Sales Amount Per Product"
+        meta:
+           ai_context: >
+              This is the primary view for revenue analysis. It combines
+              order, product, and user data. Use this view when users ask
+               about sales, revenue, or product performance.
+        format: currency
+        
       - name: total_revenue_grand_total
         description: "Internal: grand total of sale price across all rows, used for revenue_share calculation"
         multi_stage: true
