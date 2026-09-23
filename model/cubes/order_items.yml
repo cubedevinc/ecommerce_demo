@@ -102,6 +102,12 @@ cubes:
         type: number
         format: percent
 
+      - name: average_order_value
+        description: "Average revenue per distinct order"
+        sql: "{total_sale_price} / NULLIF({order_count}, 0)"
+        type: number
+        format: currency
+
     pre_aggregations:
       - name: orders_transactions_rollup
         measures:
