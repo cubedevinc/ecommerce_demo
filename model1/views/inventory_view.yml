@@ -1,0 +1,12 @@
+views:
+  - name: inventory_view
+    title: "Inventory"
+    description: "Inventory items with product details, cost, and fulfillment distribution center"
+
+    cubes:
+      - join_path: inventory_items
+        includes: "*"
+
+      - join_path: inventory_items.distribution_centers
+        prefix: true
+        includes: "*"
