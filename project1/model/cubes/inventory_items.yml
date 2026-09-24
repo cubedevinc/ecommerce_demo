@@ -1,6 +1,6 @@
 cubes:
   - name: inventory_items
-    sql_table: ecommerce.INVENTORY_ITEMS
+    sql_table: ecommerce.inventory_items
 
     joins:
       - name: distribution_centers
