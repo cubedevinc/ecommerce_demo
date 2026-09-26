@@ -108,6 +108,16 @@ cubes:
         type: number
         format: currency
 
+      - name: completed_count
+        description: "Count of order items with status Complete"
+        type: count
+        filters:
+          - sql: "{CUBE}.status = 'Complete'"
+        drill_members:
+          - id
+          - status
+          - created_at
+
     pre_aggregations:
       - name: orders_transactions_rollup
         measures:
