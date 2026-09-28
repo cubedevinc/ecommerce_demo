@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "cube": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://cubecloud.dev/mcp",
+        "--transport",
+        "http"
+      ]
+    }
+  }
+}
