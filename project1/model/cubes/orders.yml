@@ -50,3 +50,21 @@ cubes:
         rolling_window:
           trailing: 45 day
           offset: end
+
+      - name: count_previous_month
+        title: "Order Count (Previous Month)"
+        multi_stage: true
+        sql: "{count}"
+        type: number
+        time_shift:
+          - time_dimension: created_at
+            interval: 1 month
+            type: prior
+
+      - name: count_mom_growth
+        title: "Order Count MoM Growth"
+        description: "Month-over-month percentage change in order count"
+        multi_stage: true
+        sql: "100.0 * ({count} - {count_previous_month}) / NULLIF({count_previous_month}, 0)"
+        type: number
+        format: percent
