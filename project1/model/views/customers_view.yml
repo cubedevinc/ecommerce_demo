@@ -1,0 +1,8 @@
+views:
+  - name: customers_view
+    title: "Customers"
+    description: "Customer profiles with demographics, location, and acquisition source"
+
+    cubes:
+      - join_path: users
+        includes: "*"

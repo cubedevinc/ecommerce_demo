@@ -1,0 +1,46 @@
+views:
+  - name: orders_transactions
+    title: "Orders Transactions"
+    description: "Comprehensive view of order line items enriched with product details, order status, customer profiles, and distribution center information."
+
+    cubes:
+      - join_path: order_items
+        includes: "*"
+        excludes:
+          - total_revenue_grand_total
+
+      - join_path: order_items.products
+        prefix: true
+        includes: "*"
+
+      - join_path: order_items.orders
+        prefix: true
+        includes: "*"
+
+      - join_path: order_items.users
+        prefix: true
+        includes: "*"
+
+      - join_path: order_items.inventory_items.distribution_centers
+        prefix: true
+        includes: "*"
+
+    access_policy:
+      # Admins have full access to all members and all rows
+      - group: admin
+        member_level:
+          includes: "*"
+
+      # Analysts can see all members except PII user fields,
+      # and only rows matching their own country attribute
+      - group: analyst
+        member_level:
+          excludes:
+            - users_email
+            - users_street_address
+            - users_postal_code
+        row_level:
+          filters:
+            - member: users_country
+              operator: equals
+              values: [ "{ userAttributes.country }" ]
