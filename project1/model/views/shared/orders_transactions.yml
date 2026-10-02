@@ -39,6 +39,8 @@ views:
             - users_email
             - users_street_address
             - users_postal_code
+            - orders_count_previous_month
+            - orders_count_mom_growth
         row_level:
           filters:
             - member: users_country
