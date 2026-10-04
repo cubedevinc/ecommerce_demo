@@ -4,18 +4,8 @@ view_groups:
     views:
       - orders_transactions
 
-  - name: customers
-    title: Customers
-    views:
-      - customers_view
-
   - name: catalog
     title: Product Catalog
     views:
       - products_view
       - inventory_view
-
-  - name: web_analytics
-    title: Web Analytics
-    views:
-      - web_events_view
