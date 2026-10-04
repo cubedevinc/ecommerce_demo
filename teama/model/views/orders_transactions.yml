@@ -36,6 +36,8 @@ views:
       - group: analyst
         member_level:
           excludes:
+	    - count_previous_month
+	    - count_mom_growth
             - users_email
             - users_street_address
             - users_postal_code
