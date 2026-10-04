@@ -1,2 +1,4 @@
-/teama/ @team-leads-teama
-/teamb/ @team-leads-teamb
+/model/cubes/teamA/ @team-members-teama
+/model/cubes/teamB/ @team-members-teamb
+/model/views/teamA/ @team-members-teama
+/model/views/teamB/ @team-members-teamb
