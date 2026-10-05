@@ -36,11 +36,8 @@ views:
       - group: analyst
         member_level:
           excludes:
-<<<<<<< HEAD
             - count_previous_month
             - count_mom_growth
-=======
->>>>>>> upstream/target-dev-branch
             - users_email
             - users_street_address
             - users_postal_code
