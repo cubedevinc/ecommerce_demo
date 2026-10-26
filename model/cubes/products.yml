@@ -2,6 +2,11 @@ cubes:
   - name: products
     sql_table: ECOMMERCE.PRODUCTS
 
+    joins:
+      - name: product_categories
+        sql: "{CUBE}.CATEGORY = {product_categories.category}"
+        relationship: many_to_one
+
     dimensions:
       - name: id
         sql: ID
@@ -28,6 +33,12 @@ cubes:
         sql: CATEGORY
         type: string
        
+      - name: category_es
+        title: "Category (Spanish)"
+        description: "Product category translated to Spanish with Snowflake Cortex AI (SNOWFLAKE.CORTEX.TRANSLATE)"
+        sql: "{product_categories.category_es}"
+        type: string
+
       - name: cost
         sql: COST
         type: number

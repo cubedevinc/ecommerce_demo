@@ -1,0 +1,31 @@
+cubes:
+  - name: product_categories
+    description: "One row per product category, with an AI-generated store blurb and Spanish name (Snowflake Cortex). Built from distinct categories so the AI functions run once per category, not once per product."
+    public: false
+    sql: |
+      SELECT
+        category,
+        TRIM(SNOWFLAKE.CORTEX.COMPLETE(
+          'mistral-7b',
+          'Write one short sentence (maximum 20 words) describing the clothing category "' || category || '" for an online fashion store. Return only the sentence.'
+        ), ' "') AS blurb,
+        SNOWFLAKE.CORTEX.TRANSLATE(category, 'en', 'es') AS category_es
+      FROM (SELECT DISTINCT category FROM ECOMMERCE.PRODUCTS)
+
+    dimensions:
+      - name: category
+        sql: "{CUBE}.CATEGORY"
+        type: string
+        primary_key: true
+
+      - name: category_es
+        title: "Category (Spanish)"
+        description: "Product category translated to Spanish with Snowflake Cortex AI (SNOWFLAKE.CORTEX.TRANSLATE), once per category"
+        sql: "{CUBE}.CATEGORY_ES"
+        type: string
+
+      - name: blurb
+        title: "Category Blurb"
+        description: "One-sentence description of the category written by Snowflake Cortex AI (SNOWFLAKE.CORTEX.COMPLETE)"
+        sql: "{CUBE}.BLURB"
+        type: string
