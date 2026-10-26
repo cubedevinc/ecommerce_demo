@@ -6,3 +6,8 @@ views:
     cubes:
       - join_path: products
         includes: "*"
+
+      - join_path: products.product_categories
+        prefix: true
+        includes:
+          - blurb

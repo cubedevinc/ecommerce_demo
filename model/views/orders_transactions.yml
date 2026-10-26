@@ -13,6 +13,11 @@ views:
         prefix: true
         includes: "*"
 
+      - join_path: order_items.products.product_categories
+        prefix: true
+        includes:
+          - blurb
+
       - join_path: order_items.orders
         prefix: true
         includes: "*"

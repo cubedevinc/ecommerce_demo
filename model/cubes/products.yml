@@ -2,6 +2,11 @@ cubes:
   - name: products
     sql_table: ECOMMERCE.PRODUCTS
 
+    joins:
+      - name: product_categories
+        sql: "{CUBE}.CATEGORY = {product_categories.category}"
+        relationship: many_to_one
+
     dimensions:
       - name: id
         sql: ID
