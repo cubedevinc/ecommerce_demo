@@ -36,7 +36,7 @@ cubes:
       - name: category_es
         title: "Category (Spanish)"
         description: "Product category translated to Spanish with Snowflake Cortex AI (SNOWFLAKE.CORTEX.TRANSLATE)"
-        sql: "SNOWFLAKE.CORTEX.TRANSLATE({category}, 'en', 'es')"
+        sql: "{product_categories.category_es}"
         type: string
 
       - name: cost
