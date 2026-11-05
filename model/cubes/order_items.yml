@@ -1,7 +1,12 @@
 cubes:
   - name: order_items
-    sql_table: ECOMMERCE.ORDER_ITEMS
+    sql_table: ecommerce.order_items
     description: Order items in the e-commerce platform
+    meta:
+      domain: Sales
+      owner: sales-analytics@example.com
+      certified: true
+      source_table: sales-engineering-414918.ecommerce.order_items
 
     joins:
       - name: orders
@@ -102,7 +107,110 @@ cubes:
         type: number
         format: percent
 
+      - name: average_order_value
+        description: "Average revenue per distinct order"
+        sql: "{total_sale_price} / NULLIF({order_count}, 0)"
+        type: number
+        format: currency
+
+      # ---- mero-poc: governed, additive KPIs (pre-aggregation friendly) ----
+      - name: revenue
+        title: Revenue
+        description: "Gross sales value of order lines (sum of sale price), excluding cancelled lines. Certified KPI."
+        type: sum
+        sql: "CASE WHEN {CUBE}.STATUS <> 'Cancelled' THEN {CUBE}.SALE_PRICE END"
+        format: currency
+        meta:
+          certified: true
+          glossary_term: "Revenue"
+          ai_context: "Use for any revenue / sales / turnover question. Cancelled lines are already excluded."
+
+      - name: cost_of_goods
+        title: Cost of Goods Sold
+        description: "Inventory cost of order lines, excluding cancelled lines."
+        type: sum
+        sql: "CASE WHEN {CUBE}.STATUS <> 'Cancelled' THEN {inventory_items.cost} END"
+        format: currency
+
+      - name: gross_margin
+        title: Gross Margin
+        description: "Revenue minus Cost of Goods Sold."
+        type: number
+        sql: "{revenue} - {cost_of_goods}"
+        format: currency
+
+      - name: gross_margin_pct
+        title: Gross Margin %
+        description: "Gross Margin as a share of Revenue."
+        type: number
+        sql: "1.0 * ({revenue} - {cost_of_goods}) / NULLIF({revenue}, 0)"
+        format: percent
+
+      - name: units_sold
+        title: Units Sold
+        description: "Number of order lines that were not cancelled."
+        type: count
+        filters:
+          - sql: "{CUBE}.STATUS <> 'Cancelled'"
+
+      - name: units_returned
+        title: Units Returned
+        type: count
+        filters:
+          - sql: "{CUBE}.STATUS = 'Returned'"
+
+      - name: return_rate
+        title: Return Rate
+        description: "Units Returned divided by Units Sold."
+        type: number
+        sql: "1.0 * {units_returned} / NULLIF({units_sold}, 0)"
+        format: percent
+
+      - name: distinct_orders
+        title: Orders
+        description: "Distinct orders (approximate distinct count so it can be served from pre-aggregations at any grain)."
+        type: count_distinct_approx
+        sql: order_id
+
     pre_aggregations:
+      # Lambda: serve history from Cube Store, union live BigQuery rows for the
+      # window that is not yet built (near real-time). Must be listed first.
+      - name: sales_lambda
+        type: rollup_lambda
+        union_with_source_data: true
+        rollups:
+          - CUBE.sales_batch
+
+      # Batch rollup that backs the Power BI "Sales" view.
+      - name: sales_batch
+        measures:
+          - revenue
+          - cost_of_goods
+          - units_sold
+          - units_returned
+          - distinct_orders
+          - count
+        dimensions:
+          - status
+          - products.department
+          - products.category
+          - products.brand
+          - users.country
+          - users.state
+          - users.traffic_source
+          - distribution_centers.name
+        time_dimension: created_at
+        granularity: day
+        partition_granularity: month
+        build_range_start:
+          sql: SELECT TIMESTAMP('2019-01-01')
+        build_range_end:
+          sql: SELECT TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY))
+        refresh_key:
+          every: 1 hour
+          incremental: true
+          update_window: 7 day
+
       - name: orders_transactions_rollup
         measures:
           - count

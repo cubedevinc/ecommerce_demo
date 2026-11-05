@@ -1,0 +1,154 @@
+views:
+  - name: sales
+    title: Sales
+    description: >
+      Certified sales model for Power BI (DAX API), Excel, AI agents and APIs.
+      One row per order line; customer, product and fulfilment attributes are
+      pre-joined so BI users never see join keys or need to remodel.
+    meta:
+      domain: Sales
+      data_product: Sales Performance
+      owner: sales-analytics@example.com
+      certified: true
+      ai_context: >
+        Primary view for revenue, margin, units, returns and orders. Use Revenue
+        (not raw sale price) for any sales question. "Order Date" is the default
+        date. Gross Margin % and Return Rate are ratios - never sum them.
+
+    cubes:
+      - join_path: order_items
+        includes:
+          - revenue
+          - cost_of_goods
+          - gross_margin
+          - gross_margin_pct
+          - units_sold
+          - units_returned
+          - return_rate
+          - name: distinct_orders
+            alias: orders
+          - name: created_at
+            alias: order_date
+            title: Order Date
+          - name: shipped_at
+            alias: ship_date
+            title: Ship Date
+          - name: delivered_at
+            alias: delivery_date
+            title: Delivery Date
+          - name: status
+            alias: line_status
+            title: Line Status
+
+      - join_path: order_items.products
+        includes:
+          - name: department
+            title: Department
+          - name: category
+            title: Category
+          - name: brand
+            title: Brand
+          - name: name
+            alias: product_name
+            title: Product
+          - name: retail_price
+            title: List Price
+
+      - join_path: order_items.users
+        includes:
+          - name: country
+            title: Country
+          - name: state
+            title: State / Region
+          - name: city
+            title: City
+          - name: age_band
+            title: Age Band
+          - name: gender
+            title: Gender
+          - name: traffic_source
+            title: Acquisition Channel
+          - name: full_name
+            alias: customer_name
+            title: Customer Name
+          - name: email
+            alias: customer_email
+            title: Customer Email
+
+      - join_path: order_items.inventory_items.distribution_centers
+        includes:
+          - name: name
+            alias: distribution_center
+            title: Distribution Center
+
+    folders:
+      - name: "KPIs"
+        includes:
+          - revenue
+          - gross_margin
+          - gross_margin_pct
+          - orders
+      - name: "Volume & Returns"
+        includes:
+          - units_sold
+          - units_returned
+          - return_rate
+          - cost_of_goods
+      - name: "Dates"
+        includes:
+          - order_date
+          - ship_date
+          - delivery_date
+      - name: "Product"
+        includes:
+          - department
+          - category
+          - brand
+          - product_name
+          - retail_price
+      - name: "Customer"
+        includes:
+          - country
+          - state
+          - city
+          - age_band
+          - gender
+          - traffic_source
+          - customer_name
+          - customer_email
+      - name: "Fulfilment"
+        includes:
+          - line_status
+          - distribution_center
+
+    access_policy:
+      # Admins / Mero developers: everything, unmasked
+      - groups: [admin, developer]
+        member_level:
+          includes: "*"
+
+      # Regional analysts: all members, PII masked, only their country's rows
+      - group: analyst
+        member_level:
+          excludes:
+            - customer_name
+            - customer_email
+        member_masking:
+          includes:
+            - customer_name
+            - customer_email
+        row_level:
+          filters:
+            - member: country
+              operator: equals
+              values: ["{ userAttributes.country }"]
+
+      # Power BI report viewers: KPIs and attributes only, no PII at all
+      - group: viewer
+        member_level:
+          excludes:
+            - customer_name
+            - customer_email
+            - cost_of_goods
+            - gross_margin
+            - gross_margin_pct

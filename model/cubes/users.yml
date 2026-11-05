@@ -1,6 +1,10 @@
 cubes:
   - name: users
-    sql_table: ECOMMERCE.USERS
+    sql_table: ecommerce.users
+    meta:
+      domain: Customer
+      owner: customer-data@example.com
+      contains_pii: true
 
     dimensions:
       - name: id
@@ -11,22 +15,49 @@ cubes:
       - name: first_name
         sql: FIRST_NAME
         type: string
+        meta:
+          pii: true
+        mask:
+          sql: "CONCAT(LEFT({CUBE}.FIRST_NAME, 1), '***')"
 
       - name: last_name
         sql: LAST_NAME
         type: string
+        meta:
+          pii: true
+        mask:
+          sql: "CONCAT(LEFT({CUBE}.LAST_NAME, 1), '***')"
 
       - name: full_name
         sql: "CONCAT({first_name}, ' ', {last_name})"
         type: string
+        meta:
+          pii: true
+        mask: "*** masked ***"
 
       - name: email
         sql: EMAIL
         type: string
+        meta:
+          pii: true
+        mask:
+          sql: "CONCAT('***@', SPLIT({CUBE}.EMAIL, '@')[SAFE_OFFSET(1)])"
 
       - name: age
         sql: AGE
         type: number
+
+      - name: age_band
+        title: Age Band
+        type: string
+        sql: >
+          CASE
+            WHEN {CUBE}.AGE < 25 THEN '18-24'
+            WHEN {CUBE}.AGE < 35 THEN '25-34'
+            WHEN {CUBE}.AGE < 45 THEN '35-44'
+            WHEN {CUBE}.AGE < 55 THEN '45-54'
+            ELSE '55+'
+          END
 
       - name: gender
         sql: GENDER
@@ -35,6 +66,9 @@ cubes:
       - name: street_address
         sql: STREET_ADDRESS
         type: string
+        meta:
+          pii: true
+        mask: "*** masked ***"
 
       - name: city
         sql: CITY
@@ -51,6 +85,9 @@ cubes:
       - name: postal_code
         sql: POSTAL_CODE
         type: string
+        meta:
+          pii: true
+        mask: "*****"
 
       - name: latitude
         sql: LATITUDE
@@ -71,3 +108,11 @@ cubes:
     measures:
       - name: count
         type: count
+
+    hierarchies:
+      - name: geography
+        title: Customer Geography
+        levels:
+          - country
+          - state
+          - city
