@@ -1,6 +1,6 @@
 cubes:
   - name: users
-    sql_table: ECOMMERCE.USERS
+    sql_table: ecommerce.users
 
     dimensions:
       - name: id

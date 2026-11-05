@@ -1,6 +1,6 @@
 cubes:
   - name: events
-    sql_table: ECOMMERCE.EVENTS
+    sql_table: ecommerce.events
 
     joins:
       - name: users
