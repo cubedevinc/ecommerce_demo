@@ -72,3 +72,12 @@ cubes:
       - name: unique_users
         sql: user_id
         type: count_distinct
+
+    pre_aggregations:
+      - name: events_by_sequence_number
+        measures:
+          - count
+        dimensions:
+          - sequence_number
+        refresh_key:
+          every: 1 day
