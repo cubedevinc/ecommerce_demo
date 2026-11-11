@@ -72,3 +72,23 @@ cubes:
       - name: unique_users
         sql: user_id
         type: count_distinct
+
+    pre_aggregations:
+      # Headline KPIs with no breakdown (unique users, unique sessions, total events).
+      # Distinct counts cannot be re-aggregated, so they get their own dimensionless rollup.
+      - name: web_events_totals
+        measures:
+          - count
+          - unique_users
+          - unique_sessions
+        refresh_key:
+          every: 1 day
+
+      # Event count by sequence number.
+      - name: web_events_by_sequence_number
+        measures:
+          - count
+        dimensions:
+          - sequence_number
+        refresh_key:
+          every: 1 day
