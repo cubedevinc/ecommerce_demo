@@ -12,23 +12,79 @@ cubes:
         sql: ID
         type: number
         primary_key: true
-       
+
       - name: brand
+        description: "Bygghemma demo: fictional home-improvement brand, mapped deterministically from the source brand (see brand_source)."
+        type: string
+        sql: >
+          ['Nordvik', 'Hemkraft', 'Ekhult', 'Sjöhem', 'Byggstark', 'Lindhagen',
+           'Solbris', 'Vinterö', 'Ålstad', 'Granåsen', 'Kvarnby', 'Mossdal',
+           'Torvhed', 'Hagaberg', 'Ljungmark', 'Björkvik', 'Strandhem', 'Varmhus',
+           'Snickarbo', 'Frostvik', 'Stenbacka', 'Vattenfors', 'Fjällhem', 'Ljusdal Design']
+          [OFFSET(MOD(ABS(FARM_FINGERPRINT(COALESCE({CUBE}.BRAND, ''))), 24))]
+
+      - name: brand_source
+        title: "Brand (source)"
+        description: "Original brand in the source table, before the Bygghemma demo relabel."
         sql: BRAND
         type: string
-       
+        public: false
+
       - name: department
         sql: DEPARTMENT
         type: string
-       
+
       - name: sku
         sql: SKU
         type: string
-       
+
       - name: name
+        description: "Bygghemma demo: generated home-improvement product name (noun by category + range + article number). Source name kept in name_source."
+        type: string
+        sql: >
+          CONCAT(
+            (CASE {CUBE}.CATEGORY
+              WHEN 'Outerwear & Coats' THEN ['Shower Set', 'Washbasin', 'Bathroom Cabinet', 'Toilet', 'Shower Wall', 'Bathtub']
+              WHEN 'Jeans' THEN ['Kitchen Mixer Tap', 'Kitchen Sink', 'Kitchen Cabinet', 'Worktop', 'Cooker Hood', 'Dishwasher']
+              WHEN 'Sweaters' THEN ['Oak Parquet', 'Laminate Floor', 'Vinyl Plank', 'Floor Tile', 'Floor Underlay', 'Skirting Board']
+              WHEN 'Fashion Hoodies & Sweatshirts' THEN ['Garden Sofa', 'Outdoor Dining Set', 'Sun Lounger', 'Parasol', 'Garden Bench', 'Outdoor Table']
+              WHEN 'Swim' THEN ['Above-ground Pool', 'Hot Tub', 'Pool Pump', 'Sand Filter', 'Pool Cover', 'Pool Heater']
+              WHEN 'Intimates' THEN ['Bookshelf', 'Sideboard', 'Wardrobe', 'Dining Chair', 'Coffee Table', 'Wall Mirror']
+              WHEN 'Tops & Tees' THEN ['Pendant Lamp', 'Ceiling Light', 'Wall Lamp', 'LED Spotlight', 'Floor Lamp', 'Outdoor Wall Light']
+              WHEN 'Sleep & Lounge' THEN ['Sauna Heater', 'Sauna Cabin', 'Sauna Bench', 'Infrared Sauna', 'Sauna Stones', 'Sauna Door']
+              WHEN 'Shorts' THEN ['Raised Bed', 'Greenhouse', 'Lawn Mower', 'Hedge Trimmer', 'Garden Hose', 'Planter']
+              WHEN 'Accessories' THEN ['Door Handle', 'Hinge Set', 'Cabinet Knob', 'Screw Assortment', 'Wall Plug Kit', 'Hook Rail']
+              WHEN 'Active' THEN ['Cordless Drill', 'Impact Driver', 'Circular Saw', 'Jigsaw', 'Angle Grinder', 'Orbital Sander']
+              WHEN 'Underwear' THEN ['Mixer Valve', 'PEX Pipe', 'Floor Drain', 'Shut-off Valve', 'Water Heater', 'Pipe Fitting Kit']
+              WHEN 'Pants' THEN ['Interior Door', 'Front Door', 'Sliding Door', 'Door Frame', 'Glass Door', 'Security Door']
+              WHEN 'Dresses' THEN ['Casement Window', 'Roof Window', 'Window Sill', 'Tilt Window', 'Triple-glazed Window', 'Window Frame']
+              WHEN 'Socks' THEN ['Wall Paint', 'Ceiling Paint', 'Exterior Paint', 'Wood Stain', 'Primer', 'Floor Paint']
+              WHEN 'Maternity' THEN ['Wood Stove', 'Heat Pump', 'Radiator', 'Electric Fireplace', 'Underfloor Heating Kit', 'Chimney Kit']
+              WHEN 'Plus' THEN ['Wall Socket', 'Light Switch', 'Extension Cord', 'Dimmer', 'Junction Box', 'Cable Reel']
+              WHEN 'Suits & Sport Coats' THEN ['Plasterboard', 'Plywood Sheet', 'Timber Beam', 'Concrete Mix', 'OSB Board', 'Decking Board']
+              WHEN 'Socks & Hosiery' THEN ['Paint Roller', 'Brush Set', 'Masking Tape', 'Paint Tray', 'Drop Cloth', 'Wall Filler']
+              WHEN 'Pants & Capris' THEN ['Wall Shelf', 'Storage Rack', 'Tool Cabinet', 'Garage Shelving', 'Storage Box', 'Wall Rail']
+              WHEN 'Leggings' THEN ['Mineral Wool', 'Insulation Board', 'Vapour Barrier', 'Sealant Foam', 'Draught Strip', 'Pipe Insulation']
+              WHEN 'Blazers & Jackets' THEN ['Roof Tile', 'Roofing Felt', 'Gutter', 'Downpipe', 'Roof Sheet', 'Ridge Cap']
+              WHEN 'Skirts' THEN ['Claw Hammer', 'Spirit Level', 'Screwdriver Set', 'Hand Saw', 'Tape Measure', 'Utility Knife']
+              WHEN 'Suits' THEN ['Extractor Fan', 'Air Vent', 'Ventilation Unit', 'Duct Kit', 'Bathroom Fan', 'Air Purifier']
+              WHEN 'Jumpsuits & Rompers' THEN ['Gas Grill', 'Charcoal Grill', 'Pizza Oven', 'Outdoor Kitchen', 'Grill Cover', 'Smoker']
+              WHEN 'Clothing Sets' THEN ['Smart Thermostat', 'Smart Plug', 'Video Doorbell', 'Smart Lock', 'Motion Sensor', 'Smart Bulb']
+              ELSE ['Product', 'Product', 'Product', 'Product', 'Product', 'Product']
+            END)[OFFSET(MOD({CUBE}.ID, 6))],
+            ' ',
+            ['Classic', 'Pro', 'Nordic', 'Premium', 'Compact', 'Plus'][OFFSET(MOD(DIV({CUBE}.ID, 6), 6))],
+            ' ',
+            CAST(100000 + {CUBE}.ID AS STRING)
+          )
+
+      - name: name_source
+        title: "Name (source)"
+        description: "Original product name in the source table, before the Bygghemma demo relabel."
         sql: NAME
         type: string
-       
+        public: false
+
       - name: category
         description: "Bygghemma demo: home-improvement category, relabelled 1:1 from the source category (see category_source)."
         type: string
@@ -69,7 +125,7 @@ cubes:
         sql: CATEGORY
         type: string
         public: false
-       
+
       - name: category_es
         title: "Category (Spanish)"
         description: "Product category translated to Spanish with Snowflake Cortex AI (SNOWFLAKE.CORTEX.TRANSLATE)"
@@ -79,15 +135,15 @@ cubes:
       - name: cost
         sql: COST
         type: number
-       
+
       - name: retail_price
         sql: RETAIL_PRICE
         type: number
-       
+
       - name: distribution_center_id
         sql: DISTRIBUTION_CENTER_ID
         type: number
-       
+
     measures:
       - name: count
         type: count
