@@ -5,6 +5,7 @@ cubes:
       DEMO DATA. Weekly competitor price observations per product for three anonymised
       competitors, generated deterministically from products.retail_price (no real
       competitor data). One row per product x competitor x week, 26 weeks to 2026-09-21.
+      Competitor B cuts prices gradually over the period; Competitor C raises them slightly.
     sql: >
       SELECT
         CONCAT(CAST(p.id AS STRING), '-', c.competitor, '-', CAST(w AS STRING)) AS observation_id,
@@ -14,14 +15,15 @@ cubes:
         p.retail_price AS own_price,
         ROUND(p.retail_price * (
           1 + c.bias
+          + c.weekly_drift * DATE_DIFF(w, DATE '2026-03-30', WEEK)
           + (MOD(ABS(FARM_FINGERPRINT(CONCAT(CAST(p.id AS STRING), c.competitor))), 301) - 150) / 1000.0
           + (MOD(ABS(FARM_FINGERPRINT(CONCAT(CAST(p.id AS STRING), c.competitor, CAST(w AS STRING)))), 61) - 30) / 1000.0
         ), 2) AS competitor_price
       FROM ecommerce.products p
       CROSS JOIN UNNEST([
-        STRUCT('Competitor A' AS competitor, 0.03 AS bias),
-        STRUCT('Competitor B' AS competitor, -0.02 AS bias),
-        STRUCT('Competitor C' AS competitor, 0.06 AS bias)
+        STRUCT('Competitor A' AS competitor, 0.03 AS bias, 0.0 AS weekly_drift),
+        STRUCT('Competitor B' AS competitor, 0.03 AS bias, -0.003 AS weekly_drift),
+        STRUCT('Competitor C' AS competitor, 0.04 AS bias, 0.001 AS weekly_drift)
       ]) c
       CROSS JOIN UNNEST(GENERATE_DATE_ARRAY(DATE '2026-03-30', DATE '2026-09-21', INTERVAL 1 WEEK)) w
       WHERE p.retail_price > 0
