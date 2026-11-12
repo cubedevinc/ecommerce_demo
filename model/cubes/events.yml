@@ -72,3 +72,37 @@ cubes:
       - name: unique_users
         sql: user_id
         type: count_distinct
+
+      - name: product_view_sessions
+        title: Product View Sessions
+        sql: session_id
+        type: count_distinct
+        filters:
+          - sql: "{CUBE}.EVENT_TYPE = 'product'"
+
+      - name: cart_sessions
+        title: Add-to-Cart Sessions
+        sql: session_id
+        type: count_distinct
+        filters:
+          - sql: "{CUBE}.EVENT_TYPE = 'cart'"
+
+      - name: purchase_sessions
+        title: Purchase Sessions
+        sql: session_id
+        type: count_distinct
+        filters:
+          - sql: "{CUBE}.EVENT_TYPE = 'purchase'"
+
+      - name: conversion_rate
+        title: Session Conversion Rate
+        description: Sessions with a purchase / all sessions
+        type: number
+        format: percent
+        sql: "1.0 * {purchase_sessions} / NULLIF({unique_sessions}, 0)"
+
+      - name: cart_to_purchase_rate
+        title: Cart-to-Purchase Rate
+        type: number
+        format: percent
+        sql: "1.0 * {purchase_sessions} / NULLIF({cart_sessions}, 0)"

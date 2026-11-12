@@ -19,3 +19,8 @@ view_groups:
     title: Web Analytics
     views:
       - web_events_view
+
+  - name: pricing
+    title: Pricing
+    views:
+      - price_competitiveness_view

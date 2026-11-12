@@ -1,0 +1,144 @@
+cubes:
+  - name: competitor_prices
+    title: Competitor Prices
+    description: >
+      DEMO DATA. Weekly competitor price observations per product for three anonymised
+      competitors, generated deterministically from products.retail_price (no real
+      competitor data). One row per product x competitor x week, 26 weeks to 2026-09-21.
+    sql: >
+      SELECT
+        CONCAT(CAST(p.id AS STRING), '-', c.competitor, '-', CAST(w AS STRING)) AS observation_id,
+        p.id AS product_id,
+        c.competitor AS competitor,
+        CAST(w AS TIMESTAMP) AS observed_at,
+        p.retail_price AS own_price,
+        ROUND(p.retail_price * (
+          1 + c.bias
+          + (MOD(ABS(FARM_FINGERPRINT(CONCAT(CAST(p.id AS STRING), c.competitor))), 301) - 150) / 1000.0
+          + (MOD(ABS(FARM_FINGERPRINT(CONCAT(CAST(p.id AS STRING), c.competitor, CAST(w AS STRING)))), 61) - 30) / 1000.0
+        ), 2) AS competitor_price
+      FROM ecommerce.products p
+      CROSS JOIN UNNEST([
+        STRUCT('Competitor A' AS competitor, 0.03 AS bias),
+        STRUCT('Competitor B' AS competitor, -0.02 AS bias),
+        STRUCT('Competitor C' AS competitor, 0.06 AS bias)
+      ]) c
+      CROSS JOIN UNNEST(GENERATE_DATE_ARRAY(DATE '2026-03-30', DATE '2026-09-21', INTERVAL 1 WEEK)) w
+      WHERE p.retail_price > 0
+
+    joins:
+      - name: products
+        sql: "{CUBE}.product_id = {products.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: observation_id
+        sql: observation_id
+        type: string
+        primary_key: true
+
+      - name: product_id
+        sql: product_id
+        type: number
+
+      - name: competitor
+        sql: competitor
+        type: string
+        description: Anonymised competitor (demo data)
+
+      - name: observed_at
+        sql: observed_at
+        type: time
+        description: Week the competitor price was observed
+
+      - name: own_price
+        sql: own_price
+        type: number
+        format: currency
+
+      - name: competitor_price
+        sql: competitor_price
+        type: number
+        format: currency
+
+      - name: price_gap_pct
+        sql: "SAFE_DIVIDE({CUBE}.own_price - {CUBE}.competitor_price, {CUBE}.competitor_price)"
+        type: number
+        format: percent
+        description: Our price vs competitor; positive = we are more expensive
+
+      - name: price_position
+        type: string
+        description: Whether we are cheaper, at parity (within 2%) or more expensive than the competitor
+        case:
+          when:
+            - sql: "{CUBE.price_gap_pct} < -0.02"
+              label: Cheaper
+            - sql: "{CUBE.price_gap_pct} > 0.02"
+              label: More expensive
+          else:
+            label: At parity
+
+    measures:
+      - name: observations
+        type: count
+
+      - name: products_tracked
+        type: count_distinct
+        sql: product_id
+
+      - name: total_own_price
+        type: sum
+        sql: own_price
+        public: false
+
+      - name: total_competitor_price
+        type: sum
+        sql: competitor_price
+        public: false
+
+      - name: avg_own_price
+        type: avg
+        sql: own_price
+        format: currency
+
+      - name: avg_competitor_price
+        type: avg
+        sql: competitor_price
+        format: currency
+
+      - name: price_index
+        title: Price Index
+        description: "Our basket price / competitor basket price x 100. Below 100 = we are cheaper."
+        type: number
+        sql: "100.0 * {total_own_price} / NULLIF({total_competitor_price}, 0)"
+
+      - name: cheaper_observations
+        type: count
+        public: false
+        filters:
+          - sql: "{CUBE}.own_price < {CUBE}.competitor_price * 0.98"
+
+      - name: more_expensive_observations
+        type: count
+        public: false
+        filters:
+          - sql: "{CUBE}.own_price > {CUBE}.competitor_price * 1.02"
+
+      - name: share_cheaper
+        title: "% Cheaper than Competitor"
+        type: number
+        format: percent
+        sql: "1.0 * {cheaper_observations} / NULLIF({observations}, 0)"
+
+      - name: share_more_expensive
+        title: "% More Expensive than Competitor"
+        type: number
+        format: percent
+        sql: "1.0 * {more_expensive_observations} / NULLIF({observations}, 0)"
+
+      - name: avg_price_gap_pct
+        title: Avg Price Gap %
+        type: avg
+        sql: "{price_gap_pct}"
+        format: percent

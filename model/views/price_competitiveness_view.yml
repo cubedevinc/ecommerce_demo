@@ -1,0 +1,17 @@
+views:
+  - name: price_competitiveness_view
+    title: "Price Competitiveness"
+    description: "DEMO DATA. Weekly competitor price observations vs our retail price by product, category, brand and competitor."
+
+    cubes:
+      - join_path: competitor_prices
+        includes: "*"
+
+      - join_path: competitor_prices.products
+        prefix: true
+        includes:
+          - name
+          - brand
+          - category
+          - department
+          - sku
