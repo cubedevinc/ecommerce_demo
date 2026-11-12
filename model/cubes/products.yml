@@ -30,8 +30,45 @@ cubes:
         type: string
        
       - name: category
+        description: "Bygghemma demo: home-improvement category, relabelled 1:1 from the source category (see category_source)."
+        type: string
+        sql: >
+          CASE {CUBE}.CATEGORY
+            WHEN 'Outerwear & Coats' THEN 'Bathroom'
+            WHEN 'Jeans' THEN 'Kitchen'
+            WHEN 'Sweaters' THEN 'Flooring'
+            WHEN 'Fashion Hoodies & Sweatshirts' THEN 'Outdoor Furniture'
+            WHEN 'Swim' THEN 'Pools & Spas'
+            WHEN 'Intimates' THEN 'Interior & Furniture'
+            WHEN 'Tops & Tees' THEN 'Lighting'
+            WHEN 'Sleep & Lounge' THEN 'Saunas'
+            WHEN 'Shorts' THEN 'Garden & Plants'
+            WHEN 'Accessories' THEN 'Fittings & Hardware'
+            WHEN 'Active' THEN 'Power Tools'
+            WHEN 'Underwear' THEN 'Plumbing'
+            WHEN 'Pants' THEN 'Doors'
+            WHEN 'Dresses' THEN 'Windows'
+            WHEN 'Socks' THEN 'Paint'
+            WHEN 'Maternity' THEN 'Heating & Fireplaces'
+            WHEN 'Plus' THEN 'Electrical'
+            WHEN 'Suits & Sport Coats' THEN 'Building Materials'
+            WHEN 'Socks & Hosiery' THEN 'Painting Supplies'
+            WHEN 'Pants & Capris' THEN 'Storage & Shelving'
+            WHEN 'Leggings' THEN 'Insulation'
+            WHEN 'Blazers & Jackets' THEN 'Roofing'
+            WHEN 'Skirts' THEN 'Hand Tools'
+            WHEN 'Suits' THEN 'Ventilation'
+            WHEN 'Jumpsuits & Rompers' THEN 'Grills & Outdoor Kitchens'
+            WHEN 'Clothing Sets' THEN 'Smart Home'
+            ELSE {CUBE}.CATEGORY
+          END
+
+      - name: category_source
+        title: "Category (source)"
+        description: "Original category value in the source table, before the Bygghemma demo relabel."
         sql: CATEGORY
         type: string
+        public: false
        
       - name: category_es
         title: "Category (Spanish)"
