@@ -71,3 +71,13 @@ cubes:
     measures:
       - name: count
         type: count
+
+    pre_aggregations:
+      # Customers by country (Customers view)
+      - name: customers_by_country
+        measures:
+          - count
+        dimensions:
+          - country
+        refresh_key:
+          every: 6 hours

@@ -72,3 +72,73 @@ cubes:
       - name: unique_users
         sql: user_id
         type: count_distinct
+
+    # Distinct-count measures are not additive, so each rollup below is keyed
+    # on the exact dimension set the Web Events dashboards query.
+    # Ordered from fewest to most dimensions.
+    pre_aggregations:
+      # Headline KPIs: total events, sessions and users
+      - name: web_events_totals
+        measures:
+          - count
+          - unique_sessions
+          - unique_users
+        refresh_key:
+          every: 6 hours
+
+      # Sessions / events / users per month
+      - name: web_events_by_month
+        measures:
+          - count
+          - unique_sessions
+          - unique_users
+        time_dimension: created_at
+        granularity: month
+        partition_granularity: year
+        refresh_key:
+          every: 6 hours
+          incremental: true
+          update_window: 7 days
+
+      - name: web_events_by_browser
+        measures:
+          - count
+          - unique_sessions
+          - unique_users
+        dimensions:
+          - browser
+        refresh_key:
+          every: 6 hours
+
+      - name: web_events_by_traffic_source
+        measures:
+          - count
+          - unique_sessions
+          - unique_users
+        dimensions:
+          - traffic_source
+        refresh_key:
+          every: 6 hours
+
+      - name: web_events_by_page
+        measures:
+          - count
+          - unique_sessions
+        dimensions:
+          - uri
+        refresh_key:
+          every: 6 hours
+
+      # Event type x browser x traffic source breakdown; also serves
+      # events by event type and plain count queries on those dimensions
+      - name: web_events_by_type_browser_source
+        measures:
+          - count
+          - unique_sessions
+          - unique_users
+        dimensions:
+          - event_type
+          - browser
+          - traffic_source
+        refresh_key:
+          every: 6 hours
